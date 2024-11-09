@@ -1,0 +1,17 @@
+@ExceptionMiddleware_HostAddress = https://localhost:44315
+
+###
+GET {{ExceptionMiddleware_HostAddress}}/weatherforecast?days=0
+Accept: application/json
+
+###
+GET {{ExceptionMiddleware_HostAddress}}/exception
+Accept: application/json
+
+###
+GET {{ExceptionMiddleware_HostAddress}}/user-not-found-exception
+Accept: application/json
+
+###
+GET {{ExceptionMiddleware_HostAddress}}/endpoint-not-exists
+Accept: application/json
