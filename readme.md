@@ -2,7 +2,7 @@
 
 Welcome to my personal repository dedicated to exploring, documenting, and demonstrating important patterns, utilities, and best practices in the .NET ecosystem.
 
-👉 **[View Table of Contents](TableOfContents.md)**
+👉 **[View Table of Contents](tableOfContents.md)**
 
 ## 🧠 Purpose
 
