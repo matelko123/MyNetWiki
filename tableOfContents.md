@@ -8,7 +8,7 @@ This repository is organized by conceptual topics and patterns. Each entry links
 
 ### Common Patterns
 
-* [Result Pattern](Common/Patterns/ResultPattern/README.md)
+* [Result Pattern](Common/Patterns/ResultPattern/readme.md)
   A clean and reusable way to represent success or failure without using exceptions. Includes typed and untyped `Result`, error propagation, and integration with ASP.NET Core responses.
 
 ---
