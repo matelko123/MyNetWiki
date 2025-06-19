@@ -7,18 +7,20 @@ This pattern is particularly useful in:
 * Domain logic and validation
 * Service methods
 * APIs where consistent error handling is crucial
+* **Unit testing**, where expected errors can be asserted directly from the domain class
 
 ## Benefits
 
 * Makes success/failure explicit
 * Improves testability and readability
 * Avoids exceptions as a flow control mechanism
+* Centralizes and reuses error definitions in business logic
 
 ---
 
 ## Result Implementation
 
-NOTE: This is just part of the code for a better visualization of the example
+NOTE: Short form for example purposes.
 
 ```csharp
 public class Result
@@ -31,7 +33,7 @@ public class Result<TValue> : Result
     public TValue? Value { get; }
 }
 
-public record Error(HttpStatusCode Code, string Description);
+public record Error(HttpStatusCode Code, string Description) : IResult;
 ```
 
 ---
@@ -39,17 +41,23 @@ public record Error(HttpStatusCode Code, string Description);
 ## Sample Usage in ASP.NET Core API
 
 ```csharp
+app.MapGet("/", () =>
+{
+    Result<Guid> result = UserServiceTests.CreateNewUser();
+    return result ? Results.Ok(result.Value) : result.Error;
+});
 
 app.MapGet("/invalid-user", () =>
 {
     (User? user, Error? error) = UserServiceTests.CreateInvalidUser();
-    if (error)
-    {
-        return Results.BadRequest(error.Description);
-    }
-    
-    return Results.Ok(user);
-}).WithDescription($"It will throw an error");
+    return error ? Results.BadRequest(error.Description) : Results.Ok(user);
+});
+
+app.MapGet("/email-required", () =>
+{
+    Result user = UserServiceTests.EmailIsRequired();
+    return user ? Results.Ok(user) : user.Error;
+});
 ```
 
 ---
@@ -59,23 +67,34 @@ app.MapGet("/invalid-user", () =>
 ```
 ResultPattern/
 ├── ResultPattern.sln
-├── ResultPattern/             # Class Library with Result logic
+├── ResultPattern/                  # Class Library with Result logic
 │   └── Result.cs
-├── ResultPattern.Api/         # ASP.NET Core Web API
-│   └── Program.cs
-└── README.md                  # You are here
+├── ResultPattern.Api/              # ASP.NET Core Web API
+│   ├── Program.cs
+│   ├── Entities/
+│   │   └── User.cs
+│   └── UserServiceTests.cs
+├── ResultPattern.Tests/            # Unit test project
+└── README.md                       # You are here
 ```
 
-You can copy this structure into your GitHub repo to create a reusable pattern. You’ll be able to test it through the API while reusing the library in other apps.
+---
+
+## Unit Testing Support
+
+One of the strengths of this pattern is how naturally it supports **unit testing**. Because domain errors are defined in the business entity (e.g. `User.Errors.UserAlreadyExist`), tests can assert against specific domain errors directly:
+
+```csharp
+[Fact]
+public void Should_Return_UserAlreadyExist_Error()
+{
+    Result<User> result = UserService.CreateInvalidUser();
+    result.Error.ShouldBe(User.Errors.UserAlreadyExist);
+}
+```
+
+This makes tests clean, predictable, and expressive.
 
 ---
 
 This approach helps enforce a clear, consistent model for handling success/failure across your .NET codebase. It's a simple tool — but highly effective.
-
---- 
-
-## Links
-
-- [What’s the Result Type Everyone Is Using in .NET? ~ Nick Chapsas](https://youtu.be/YbuSuSpzee4?si=IH1tqExIM-mOpSE6)
-- [Goodbye Exceptions! Hello Result Pattern! ~ Gui Ferreira](https://youtu.be/C_u1WottRA0?si=3wIbIPLb1B6em2Jv)
-- [Get Rid of Exceptions in Your Code With the Result Pattern ~ Milan Jovanović](https://youtu.be/WCCkEe_Hy2Y?si=Hjk04b6_9egUy_eb)

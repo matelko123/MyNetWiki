@@ -2,7 +2,7 @@
 
 namespace ResultPattern.Api.Entities;
 
-internal sealed class User
+public sealed class User
 {
     public Guid Id { get; set; }
     public string Username { get; set; } = default!;
