@@ -1,6 +1,6 @@
-﻿using MediatR_Example.Features.Users.Models;
-using MediatR_Example.Features.Users.Repositories;
-using MediatR;
+﻿using MediatR;
+using Shared.Models;
+using Shared.Repositories;
 
 namespace MediatR_Example.Features.Users.Queries;
 

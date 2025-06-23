@@ -1,4 +1,4 @@
-namespace MediatR_Example.Features.Users.Models;
+namespace Shared.Models;
 
 // User entity
 public sealed class User

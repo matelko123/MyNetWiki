@@ -1,5 +1,5 @@
-﻿using MediatR_Example.Features.Users.Repositories;
-using MediatR;
+﻿using MediatR;
+using Shared.Repositories;
 
 namespace MediatR_Example.Features.Users.Commands;
 

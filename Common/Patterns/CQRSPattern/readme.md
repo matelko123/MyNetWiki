@@ -17,17 +17,17 @@
 - **Simplicity**: Each operation is focused and easier to reason about.
 - **Security**: Write operations can be more tightly controlled.
 
-## CQRS in .NET
+---
 
-In .NET, CQRS is often implemented using libraries like [MediatR](https://github.com/jbogard/MediatR) to dispatch commands and queries to their handlers, promoting clean separation and testability.
+## CQRS in .NET – Two Approaches
 
-## Example: User Feature with Commands and Handlers
+This repository demonstrates two ways to implement CQRS in .NET:
 
-Below is a simplified example of how to implement a command and its handler using MediatR for a user creation scenario.
+### 1. Using MediatR
 
-### Command
+MediatR is a popular library for in-process messaging, often used to implement CQRS by dispatching commands and queries to their handlers.
 
-A command represents an intention to perform an action that changes the system state. For example, creating a user:
+#### Example: User Feature with Commands and Handlers
 
 ```csharp
 // Features/Users/Commands/CreateUserCommand.cs
@@ -35,12 +35,8 @@ using MediatR;
 
 namespace MediatR_Example.Features.Users.Commands;
 
-public record CreateUserCommand(string Name) : IRequest<Guid>;
+public sealed record CreateUserCommand(string Name) : IRequest<Guid>;
 ```
-
-### Command Handler
-
-The handler processes the command. It contains the business logic for the operation:
 
 ```csharp
 // Features/Users/Commands/CreateUserCommandHandler.cs
@@ -49,19 +45,15 @@ using MediatR;
 
 namespace MediatR_Example.Features.Users.Commands;
 
-public class CreateUserCommandHandler(IUserRepository repo) : IRequestHandler<CreateUserCommand, Guid>
+internal sealed class CreateUserCommandHandler(IUserRepository repo) : IRequestHandler<CreateUserCommand, Guid>
 {
     public Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         => Task.FromResult(repo.Create(request.Name));
 }
 ```
 
-### Registering and Using Commands
-
-Commands and handlers are registered in the DI container. In a minimal API, you can use MediatR to send commands:
-
+**Usage in Minimal API:**
 ```csharp
-// Program.cs (excerpt)
 app.MapPost("/users", async (CreateUserCommand cmd, IMediator mediator) =>
 {
     var id = await mediator.Send(cmd);
@@ -69,13 +61,85 @@ app.MapPost("/users", async (CreateUserCommand cmd, IMediator mediator) =>
 });
 ```
 
-## Summary
-
-- **Commands** encapsulate write operations.
-- **Handlers** process commands and queries.
-- **MediatR** decouples the API from the business logic.
-- **CQRS** enables clear separation of concerns, scalability, and maintainability.
+> **Note:** MediatR is no longer actively maintained. For new projects, consider a custom approach.
 
 ---
 
-This repository demonstrates a basic CQRS setup using MediatR, with minimal API endpoints for user management. See the `Features/Users/Commands` folder for more command examples.
+### 2. Custom CQRS Implementation
+
+A custom implementation gives you full control, removes external dependencies, and is future-proof. Below is a simplified example based on the `Custom` project in this repository.
+
+#### Core Interfaces
+
+```csharp
+// Marker for all requests
+public interface IRequest { }
+
+// Command and Query markers
+public interface ICommand : IRequest {}
+public interface ICommand<TResult> : IRequest {}
+public interface IQuery : IRequest {}
+public interface IQuery<TResult> : IRequest {}
+
+// Handler interfaces
+public interface IRequestHandler<in TRequest, TResult>
+    where TRequest : class, IRequest
+{
+    Task<TResult> HandleAsync(TRequest request, CancellationToken cancellationToken = default);
+}
+public interface IRequestHandler<in TRequest>
+    where TRequest : class, IRequest
+{
+    Task HandleAsync(TRequest request, CancellationToken cancellationToken = default);
+}
+```
+
+#### Dispatcher Example
+
+```csharp
+public class RequestDispatcher(IServiceProvider serviceProvider) : IRequestDispatcher
+{
+    public async Task SendAsync(IRequest request, CancellationToken ct = default)
+    {
+        using var scope = serviceProvider.CreateScope();
+        Type handlerType = typeof(IRequestHandler<>).MakeGenericType(request.GetType());
+        dynamic handler = scope.ServiceProvider.GetService(handlerType)
+                          ?? throw new InvalidOperationException($"Handler for {request.GetType().Name} not registered.");
+        await handler.HandleAsync((dynamic)request, ct);
+    }
+    ...
+}
+```
+
+#### DI Registration
+
+```csharp
+public static class DependencyInjectionExtensions
+{
+    public static IServiceCollection AddRequestHandlers(this IServiceCollection services)
+    {
+        services.AddSingleton<IRequestDispatcher, RequestDispatcher>();
+        
+        services.Scan(scan => scan
+            .FromAssembliesOf(typeof(DependencyInjectionExtensions))
+            .AddClasses(classes => classes.AssignableToAny(
+                typeof(IRequestHandler<>),
+                typeof(IRequestHandler<,>)
+            ), false)
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+        );
+        return services;
+    }
+}
+```
+
+---
+
+## Recommendation
+
+While MediatR is widely used and easy to integrate, its end of support means you should consider a custom CQRS implementation for new projects. The custom approach shown here is simple, flexible, and avoids external dependencies, making it a robust choice for future-proof .NET solutions.
+
+---
+
+This repository demonstrates both approaches. For new projects, **we recommend the custom CQRS implementation**.

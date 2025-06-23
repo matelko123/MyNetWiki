@@ -1,5 +1,5 @@
-﻿using MediatR_Example.Features.Users.Models;
-using MediatR;
+﻿using MediatR;
+using Shared.Models;
 
 namespace MediatR_Example.Features.Users.Queries;
 

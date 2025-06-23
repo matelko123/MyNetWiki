@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediatR_Example", "MediatR_Example\MediatR_Example.csproj", "{14B5435F-F205-4D3D-B591-18C7E384EF9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Custom", "Custom\Custom.csproj", "{C991646D-3DD5-4EA4-9E54-5CF1A2EA0F73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{8DACD6D7-D3C5-45AE-B918-15A4418E0D38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{14B5435F-F205-4D3D-B591-18C7E384EF9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14B5435F-F205-4D3D-B591-18C7E384EF9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14B5435F-F205-4D3D-B591-18C7E384EF9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C991646D-3DD5-4EA4-9E54-5CF1A2EA0F73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C991646D-3DD5-4EA4-9E54-5CF1A2EA0F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C991646D-3DD5-4EA4-9E54-5CF1A2EA0F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C991646D-3DD5-4EA4-9E54-5CF1A2EA0F73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DACD6D7-D3C5-45AE-B918-15A4418E0D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DACD6D7-D3C5-45AE-B918-15A4418E0D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DACD6D7-D3C5-45AE-B918-15A4418E0D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DACD6D7-D3C5-45AE-B918-15A4418E0D38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Custom\Custom.csproj" />
       <ProjectReference Include="..\MediatR_Example\MediatR_Example.csproj" />
     </ItemGroup>
 
