@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{54E9C8D4-15E0-45E8-91CD-643143EE1F55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediatR_Example", "MediatR_Example\MediatR_Example.csproj", "{14B5435F-F205-4D3D-B591-18C7E384EF9E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54E9C8D4-15E0-45E8-91CD-643143EE1F55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54E9C8D4-15E0-45E8-91CD-643143EE1F55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54E9C8D4-15E0-45E8-91CD-643143EE1F55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54E9C8D4-15E0-45E8-91CD-643143EE1F55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14B5435F-F205-4D3D-B591-18C7E384EF9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14B5435F-F205-4D3D-B591-18C7E384EF9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14B5435F-F205-4D3D-B591-18C7E384EF9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14B5435F-F205-4D3D-B591-18C7E384EF9E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
